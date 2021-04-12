@@ -36,24 +36,23 @@ class Login extends React.Component {
           this.setState({ err: data.error });
         } else {
           sessionStorage.setItem("ltk", data.token);
-        }
-      });
-
-    fetch("https://fprtstore.herokuapp.com/api/users/userInfo", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "x-access-token": sessionStorage.getItem("ltk")
-      }
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          this.setState({ err: data.error });
-        } else {
-          sessionStorage.setItem("user", data.type);
-          this.props.history.push("/");
+          fetch("https://fprtstore.herokuapp.com/api/users/userInfo", {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              "x-access-token": data.token
+            }
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.error) {
+                this.setState({ err: data.error });
+              } else {
+                sessionStorage.setItem("user", data.type);
+                this.props.history.push("/");
+              }
+            });
         }
       });
   };
